@@ -24,6 +24,7 @@ import nxmx
 from tqdm import tqdm
 import dxtbx.nexus
 import hdf5plugin
+import torch
 
 
 @Pyro4.expose
@@ -151,7 +152,7 @@ class imageMonster:
                         resno = m
                     elif ftype == 'h5':
                         resno = l
-                    print("\n Rank%d" % COMM.rank, os.path.basename(f), resno, msg, "(%d/%d)"% (i_f+1, Nf), flush=seen % 10 == 0)
+                    print("\n Rank%d" % COMM.rank, os.path.basename(f), 'dev:', self.dev, 'number:', resno, msg, "(%d/%d)"% (i_f+1, Nf), flush=seen % 10 == 0)
                     i += 1
         except Exception as err:
             print(err, flush=True)
@@ -180,15 +181,15 @@ def main():
 
     dev = "cpu"
     if args.gpu:
-        dev="cuda:0"
+        dev = f"cuda:{COMM.rank % torch.cuda.device_count()}"
     kwargs = {"dev": dev, "%s_model" % args.kind: args.model, "%s_arch" % args.kind: args.arch}
-    print("Rank %d Initializing predictor" % COMM.rank, flush=True)
+    print("Rank %d Initializing predictor" % COMM.rank, 'dev:', dev, flush=True)
     dm = Pyro4.Daemon()
     name = Pyro4.locateNS()
     img_monst = imageMonster(dev, args.model, args.kind, args.arch)
     uri = dm.register(img_monst)
     name.register("image.monster%d" % COMM.rank, uri)
-    print("Rank %d is ready to consume images... " % COMM.rank, uri, flush=True)
+    print("Rank %d is ready to consume images... " % COMM.rank, uri, 'dev:', dev, flush=True)
     dm.requestLoop()
 
 
