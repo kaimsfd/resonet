@@ -19,7 +19,14 @@ Only four files have been changed from the base repo:
 - README.md
 - stat-extract.py (new file; not present in base repo)
 
-stat-extract.py extracts statistical information, and produces plots from logfiles of resonet results. For grid scan plotting, the shape of the array needs to be specified. Non-grid-scan images do not need to be reshaped for producing line and scatter plots. The resolution estimates are first added to a list which stores the order of the res estimates along with their values. This is important because multi-threading can mixup the ordering of res estimates, so we need to reorder them after processing.
+stat-extract.py extracts statistical information, and produces plots from logfiles of resonet results. For grid scan plotting, the shape of the array needs to be specified. For non-grid-scan images, the following lines are not needed:
+```
+iter_res = np.array(iter_res).reshape(22, 30)
+# flip the values of every other column; produce the snake-like ordering for grid scan
+iter_res[1::2, :] = iter_res[1::2, ::-1]
+```
+
+The resolution estimates are first added to a list which stores the order of the res estimates along with their values. This is important because multi-threading can mixup the ordering of res estimates, so we need to reorder them after processing.
 
 Testing results can be found here: https://dlsltd-my.sharepoint.com/:x:/g/personal/kai_mansfield_diamond_ac_uk/EQIGMZ8S1AtPoFRRVjCV1l4BRy7Bgu9yPiHCqsP6zJ8Rsg.
 
