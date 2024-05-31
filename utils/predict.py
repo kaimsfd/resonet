@@ -1,4 +1,3 @@
-
 import torch
 from scipy.ndimage import binary_dilation
 import numpy as np
@@ -274,13 +273,12 @@ class ImagePredict:
         dwnsamp = self.ds_stride
         if dwnsamp is None:
             is_pil = self.xdim == 2463
-            print('\n is pil', is_pil)
             if is_pil:
                 dwnsamp = 2
                 maxpool = self.maxpool_2x2
             else:  # eiger or some other large format
-                maxpool = self.maxpool_4x4
-                dwnsamp = 4
+                maxpool = self.maxpool_2x2
+                dwnsamp = 2
         maxpool = getattr(self, "maxpool_%dx%d" % (dwnsamp, dwnsamp))
         tensors = []
         _quads = self.quads
@@ -395,4 +393,3 @@ class ImagePredict:
     def _check_geom(self):
         if self.geom is None:
             raise ValueError("geom tensor isnt set, cant predict")
-
