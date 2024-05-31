@@ -26,6 +26,7 @@ iter_res = [inner_list[1] for inner_list in iter_res]
 # iter_res.append(statistics.median(iter_res))
 # iter_res.append(statistics.median(iter_res))
 iter_res = np.array(iter_res).reshape(22, 30)
+# flip the values of every other column; produce the snake-like ordering for grid scan
 iter_res[1::2, :] = iter_res[1::2, ::-1]
 
 # Define colormap
