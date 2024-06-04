@@ -4,6 +4,7 @@ Herein are Python tools for training [ResNets](https://en.wikipedia.org/wiki/Res
 
 Tutorial and installation info can be found [here](https://smb.slac.stanford.edu/~resonet/).
 
+
 ## Fork-Specific Changes
 
 This repo was forked from the original, which can be found here: https://github.com/dermen/resonet. 
@@ -27,8 +28,6 @@ iter_res[1::2, :] = iter_res[1::2, ::-1]
 ```
 
 The resolution estimates are first added to a list which stores the order of the res estimates along with their values. This is important because multi-threading can mixup the ordering of res estimates, so we need to reorder them after processing.
-
-Testing results can be found here: https://dlsltd-my.sharepoint.com/:x:/g/personal/kai_mansfield_diamond_ac_uk/EQIGMZ8S1AtPoFRRVjCV1l4BRy7Bgu9yPiHCqsP6zJ8Rsg.
 
 
 ## Dials Env
